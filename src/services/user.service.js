@@ -63,7 +63,7 @@ class UserService {
                 throw new AppError(StatusCodes.BAD_REQUEST, "Cast to ObjectId failed", [`Invalid object id received for given id: ${id}`, 'input must be a 24 character hex string, 12 byte Uint8Array, or an integer']);
             }
 
-            throw new InternalServerError('Cannot register a user');
+            throw new InternalServerError('Cannot get user details');
         }
     }
 
