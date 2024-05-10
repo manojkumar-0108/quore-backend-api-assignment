@@ -1,0 +1,17 @@
+{
+  "name": "quora-qna-backend-api",
+  "version": "1.0.0",
+  "description": "This API provides functionalities for a Q&A platform that allows users to ask questions, answer them, comment on answers, and engage through likes and follows, while organizing content via topic tags. Each request involving user actions will require a userId to be provided explicitly.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --watch src/index.js"
+  },
+  "author": "Manoj Kumar",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "http-status-codes": "^2.3.0"
+  }
+}
