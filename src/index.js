@@ -4,26 +4,33 @@ const rateLimit = require('express-rate-limit');
 const { serverConfig } = require('./config');
 const { pingCheck } = require('./controllers');
 
+const apiRouter = require('./routes');
 const app = express();
 
-// Rate Limiter
+/**
+ * Rate limiter
+ */
 const limiter = rateLimit({
     windowMs: 5 * 60 * 1000, // 5 minutes
     limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).  
-})
+});
 app.use(limiter);
 
 
-//body parser middlewares
+/**
+ * body parser middlewares
+ */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.text());
 app.use(express.raw());
 
 /**
- * GET: http://localhost:4000/ping
+ * HTTP Requests
  */
+
 app.get('/ping', pingCheck('Server is live...'));
+app.use('/api', apiRouter);
 
 
 // error handler
