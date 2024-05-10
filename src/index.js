@@ -3,6 +3,7 @@ const rateLimit = require('express-rate-limit');
 
 const { serverConfig } = require('./config');
 const { pingCheck } = require('./controllers');
+const { errorHandler } = require('./utils');
 
 const apiRouter = require('./routes');
 const app = express();
@@ -34,6 +35,9 @@ app.use('/api', apiRouter);
 
 
 // error handler
+app.use(errorHandler);
+
+
 app.listen(serverConfig.PORT, () => {
     console.log(`Started server at PORT:${serverConfig.PORT}`);
 })

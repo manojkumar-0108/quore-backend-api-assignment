@@ -5,14 +5,12 @@ const userRouter = require('./user.routes');
 const apiRouter = express.Router();
 
 /**
- * GET Request: localhost:3000/ping
+ * API End point
+ * GET Request: localhost:3000/api/
  */
 
 apiRouter.get('/ping', pingCheck("API is live..."));
 
-/**
- * GET Request: localhost:3000/api/
- */
 apiRouter.use('/users', userRouter);
 
 module.exports = apiRouter;
