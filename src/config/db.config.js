@@ -9,7 +9,8 @@ async function connectToDB() {
             await mongoose.connect(ATLAS_URL);
         }
     } catch (error) {
-        throw new InternalServerError('Unable to connect to Database');
+        console.log('Unable to connect to the DB server!');
+        // throw new InternalServerError('Unable to connect to Database');
     }
 }
 
