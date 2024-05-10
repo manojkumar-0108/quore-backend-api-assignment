@@ -44,9 +44,17 @@ async function registerUser(req, res, next) {
     }
 }
 
-function getUserDetails(req, res, next) {
+async function getUserDetails(req, res, next) {
     try {
-        throw new NotImplementedError('getUserDetails');
+        const user = await userService.getUserDetails(req.params.id);
+
+        SuccessResponse.data = user;
+        SuccessResponse.message = "Fetched user details successfully";
+        SuccessResponse.statusCode = StatusCodes.OK;
+
+        return res
+            .status(SuccessResponse.statusCode)
+            .json(SuccessResponse);
     } catch (error) {
         next(error);
     }
