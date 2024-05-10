@@ -1,6 +1,7 @@
 const express = require('express');
 
 const { pingCheck, userController } = require('../controllers');
+const { userMiddlewares } = require('../middlewares');
 
 const userRouter = express.Router();
 
@@ -13,7 +14,10 @@ userRouter.get('/ping', pingCheck("User API is live.."));
 
 userRouter.post('/login', userController.login);
 
-userRouter.post('/', userController.registerUser);
+userRouter.post('/',
+    userMiddlewares.validateUserRegistration,
+    userController.registerUser
+);
 
 userRouter.put('/', userController.updateUserDetails);
 
