@@ -1,7 +1,7 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 
-const { serverConfig } = require('./config');
+const { serverConfig, connectToDB } = require('./config');
 const { pingCheck } = require('./controllers');
 const { errorHandler } = require('./utils');
 
@@ -38,7 +38,10 @@ app.use('/api', apiRouter);
 app.use(errorHandler);
 
 
-app.listen(serverConfig.PORT, () => {
+app.listen(serverConfig.PORT, async () => {
     console.log(`Started server at PORT:${serverConfig.PORT}`);
+
+    await connectToDB();
+    console.log("Database connected successfully!");
 })
 
