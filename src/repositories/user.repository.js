@@ -8,7 +8,8 @@ class UserRepository extends CrudRepository {
     }
 
     async findByEmail(email) {
-        const response = await this.model.find({ email: email });
+        //explicitly asking mongoose to add password field in result set
+        const response = await this.model.findOne({ email: email }).select('+password');
         return response;
     }
 

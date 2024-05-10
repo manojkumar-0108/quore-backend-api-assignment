@@ -12,18 +12,28 @@ const userRouter = express.Router();
 
 userRouter.get('/ping', pingCheck("User API is live.."));
 
-userRouter.post('/login', userController.login);
+userRouter.post(
+    '/login',
+    userMiddlewares.validateLoginRequest,
+    userController.login
+);
 
-userRouter.post('/',
+userRouter.post(
+    '/',
     userMiddlewares.validateUserRegistration,
     userController.registerUser
 );
 
-userRouter.put('/', userController.updateUserDetails);
+userRouter.put('/:id',
+    userMiddlewares.checkAuth,
+    userController.updateUserDetails
+);
 
 userRouter.get('/:id', userController.getUserDetails);
 
-userRouter.delete('/:id', userController.deleteUser);
+userRouter.delete('/:id',
+    userMiddlewares.checkAuth
+    , userController.deleteUser);
 
 
 module.exports = userRouter;
