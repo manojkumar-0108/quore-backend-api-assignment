@@ -6,6 +6,8 @@ const { TopicRepository, UserRepository } = require('../repositories');
 const topicRepository = new TopicRepository();
 const userRepository = new UserRepository();
 
+
+
 class QuestionService {
 
     constructor(questionRepository) {
@@ -46,16 +48,26 @@ class QuestionService {
         }
     }
 
-
     async getAllQuestions(query) {
 
         try {
-            console.log(query);
 
-            const questions = await this.questionRepository.getAll();
+            let topicNames = new Array();
+            let question = '';
+
+            if (query?.question) {
+                question = query.question;
+            }
+
+            if (query?.tags) {
+                topicNames = query.tags.split(',');
+            }
+
+            const questions = await this.questionRepository.searchQuestions(question, topicNames);
             return questions;
         } catch (error) {
 
+            console.log(error);
             if (error.statusCode == StatusCodes.NOT_FOUND) {
                 error.message = 'No questions found!';
                 error.details = `No questions available, please start by adding one`;
@@ -73,7 +85,8 @@ class QuestionService {
     async updateQuestion(id, questionData) {
         try {
 
-            // 2. Create new topics if not available or get existing topics' IDs
+
+            // Create new topics if not available or get existing topics' IDs
             if (questionData.topics.length > 0) {
                 const topics = questionData.topics;
                 const topicsId = await Promise.all(topics.map(async (topicTag) => {
