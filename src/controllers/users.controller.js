@@ -4,9 +4,8 @@ const { NotImplementedError } = require('../errors');
 
 const { UserService } = require('../services');
 const { UserRepository } = require('../repositories');
-const { User } = require('../models');
 
-const userRepository = new UserRepository(User);
+const userRepository = new UserRepository();
 const userService = new UserService(userRepository);
 
 async function login(req, res, next) {

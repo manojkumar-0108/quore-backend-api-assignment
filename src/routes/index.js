@@ -3,6 +3,7 @@ const { pingCheck } = require('../controllers');
 
 const userRouter = require('./user.routes');
 const topicRouter = require('./topic.routes');
+const questionRouter = require('./question.routes');
 
 
 const apiRouter = express.Router();
@@ -17,5 +18,7 @@ apiRouter.get('/ping', pingCheck("API is live..."));
 apiRouter.use('/users', userRouter);
 
 apiRouter.use('/topics', topicRouter);
+
+apiRouter.use('/questions', questionRouter);
 
 module.exports = apiRouter;
