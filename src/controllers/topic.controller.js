@@ -3,9 +3,8 @@ const { SuccessResponse } = require('../utils/common');
 
 const { TopicService } = require('../services');
 const { TopicRepository } = require('../repositories');
-const { Topic } = require('../models');
 
-const topicRepository = new TopicRepository(Topic);
+const topicRepository = new TopicRepository();
 const topicService = new TopicService(topicRepository);
 
 
