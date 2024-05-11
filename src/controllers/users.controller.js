@@ -9,10 +9,23 @@ const { User } = require('../models');
 const userRepository = new UserRepository(User);
 const userService = new UserService(userRepository);
 
-function login(req, res, next) {
+async function login(req, res, next) {
 
     try {
-        throw new NotImplementedError('login');
+
+        const response = await userService.loginUser({
+            email: req.body.email,
+            password: req.body.password
+        });
+
+
+        SuccessResponse.data = response;
+        SuccessResponse.message = "Successfully signed in";
+        SuccessResponse.statusCode = StatusCodes.CREATED;
+
+        return res
+            .status(SuccessResponse.statusCode)
+            .json(SuccessResponse);
     } catch (error) {
         next(error);
     }
@@ -44,19 +57,35 @@ async function registerUser(req, res, next) {
     }
 }
 
-function getUserDetails(req, res, next) {
+async function getUserDetails(req, res, next) {
     try {
-        throw new NotImplementedError('getUserDetails');
+        const user = await userService.getUserDetails(req.params.id);
+
+        SuccessResponse.data = user;
+        SuccessResponse.message = "Fetched user details successfully";
+        SuccessResponse.statusCode = StatusCodes.OK;
+
+        return res
+            .status(SuccessResponse.statusCode)
+            .json(SuccessResponse);
     } catch (error) {
         next(error);
     }
 }
 
-
-
-function updateUserDetails(req, res, next) {
+async function updateUserDetails(req, res, next) {
     try {
-        throw new NotImplementedError('updateUserDetails');
+        console.log('update user details: ', req.body);
+
+        const user = await userService.updateUserDetails(req.params.id, req.body);
+
+        SuccessResponse.data = user;
+        SuccessResponse.message = "Successfully updated user details";
+        SuccessResponse.statusCode = StatusCodes.OK;
+
+        return res
+            .status(SuccessResponse.statusCode)
+            .json(SuccessResponse);
     } catch (error) {
         next(error);
     }

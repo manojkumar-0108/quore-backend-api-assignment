@@ -1,3 +1,6 @@
+const { StatusCodes } = require('http-status-codes');
+const { AppError } = require('../errors');
+
 class CrudRepository {
 
     constructor(model) {
@@ -11,6 +14,7 @@ class CrudRepository {
 
     async get(id) {
         const response = await this.model.findById(id);
+
         if (!response) {
             throw new AppError(StatusCodes.NOT_FOUND);
         }
@@ -34,7 +38,7 @@ class CrudRepository {
     }
 
     async update(query, problemData) {
-        const response = await this.model.findOneAndUpdate(query, problemData);
+        const response = await this.model.findOneAndUpdate(query, problemData, { new: true });
         if (!response) {
             throw new AppError(StatusCodes.NOT_FOUND);
         }

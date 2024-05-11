@@ -1,25 +1,33 @@
 
 const BaseError = require("../errors/base.error");
 const { StatusCodes } = require('http-status-codes');
-
-const { ErrorResponse } = require('./common');
+const { Logger } = require('../config');
 
 function errorHandler(err, req, res, next) {
 
     if (err instanceof BaseError) {
 
-        ErrorResponse.statusCode = err.statusCode;
-        ErrorResponse.message = err.message;
-        ErrorResponse.error.details = err.details;
+        Logger.error({ message: err.name, error: err.stack });
+
         return res
             .status(err.statusCode)
-            .json(ErrorResponse);
+            .json({
+                success: false,
+                message: err.message,
+                error: err.details,
+                data: {}
+            });
     }
 
-    ErrorResponse.error = err;
+    Logger.error({ message: 'Something went wrong...', error: err });
     return res
         .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .json(ErrorResponse);
+        .json({
+            success: false,
+            message: "Something went wrong!!",
+            error: err,
+            data: {}
+        });
 }
 
 module.exports = errorHandler;
