@@ -1,3 +1,4 @@
 module.exports = {
-    userMiddlewares: require('./user.middlewares')
+    userMiddlewares: require('./user.middlewares'),
+    topicMiddlewares: require('./topic.middlewares')
 }

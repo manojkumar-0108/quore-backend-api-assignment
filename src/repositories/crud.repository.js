@@ -23,7 +23,7 @@ class CrudRepository {
 
     async getAll() {
         const response = await this.model.find({});
-        if (!response) {
+        if (response.length == 0) {
             throw new AppError(StatusCodes.NOT_FOUND);
         }
         return response;
