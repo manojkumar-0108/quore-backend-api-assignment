@@ -18,6 +18,12 @@ questionRouter.post(
     questionController.postQuestion
 );
 
+questionRouter.put(
+    '/:id',
+    questionMiddlewares.validateUpdateQuestionRequest,
+    questionController.updateQuestions
+);
+
 questionRouter.get('/', questionController.searchQuestions);
 
 

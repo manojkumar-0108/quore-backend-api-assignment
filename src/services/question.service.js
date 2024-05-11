@@ -70,6 +70,42 @@ class QuestionService {
         }
     }
 
+    async updateQuestion(id, questionData) {
+        try {
+
+            // 2. Create new topics if not available or get existing topics' IDs
+            if (questionData.topics.length > 0) {
+                const topics = questionData.topics;
+                const topicsId = await Promise.all(topics.map(async (topicTag) => {
+                    let topic = await topicRepository.findByName(topicTag);
+                    if (!topic) {
+                        topic = await topicRepository.create({ name: topicTag });
+                    }
+                    return topic._id;
+                }));
+                questionData.topics = topicsId;
+            }
+            const question = await this.questionRepository.update({ _id: id }, questionData);
+            return question;
+        } catch (error) {
+            console.error(error);
+            if (error.statusCode == StatusCodes.NOT_FOUND) {
+                error.message = 'Cannot update the questions!';
+                error.details = `No questions found for given id ${id}`;
+                throw error;
+            }
+
+
+            if (error instanceof BaseError) {
+                throw error;
+            }
+            if (error.name == 'MongooseError') {
+                throw new AppError(StatusCodes.SERVICE_UNAVAILABLE, "Cannot update the question!", ['Cannot connect to database', 'Database timeout!']);
+            }
+            throw new InternalServerError('Cannot update the question');
+        }
+    }
+
 }
 
 module.exports = QuestionService;

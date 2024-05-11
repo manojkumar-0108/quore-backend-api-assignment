@@ -47,8 +47,28 @@ async function searchQuestions(req, res, next) {
     }
 }
 
+async function updateQuestions(req, res, next) {
+    try {
+
+        const question = await questionService.updateQuestion(req.params.id, req.body);
+
+        SuccessResponse.data = question;
+        SuccessResponse.message = "Successfully updated question";
+        SuccessResponse.statusCode = StatusCodes.OK;
+
+        return res
+            .status(SuccessResponse.statusCode)
+            .json(SuccessResponse);
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+
 
 module.exports = {
     postQuestion,
-    searchQuestions
+    searchQuestions,
+    updateQuestions
 }

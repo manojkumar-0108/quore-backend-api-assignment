@@ -40,8 +40,27 @@ function validatePostQuestionRequest(req, res, next) {
     next();
 }
 
+function validateUpdateQuestionRequest(req, res, next) {
 
+    const data = {};
+    if (req.body.title || req.body.body || req.body.topics) {
+
+        if (req.body.title) {
+            data.title = req.body.title;
+        }
+        if (req.body.body) {
+            data.body = req.body.body;
+        }
+        if (req.body.topics) {
+            const topics = req.body.topics.split(',');
+            data.topics = topics;
+        }
+    }
+    req.body = data;
+    next();
+}
 
 module.exports = {
-    validatePostQuestionRequest
+    validatePostQuestionRequest,
+    validateUpdateQuestionRequest
 };
