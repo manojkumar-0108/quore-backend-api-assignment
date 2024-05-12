@@ -64,9 +64,26 @@ async function deleteAnswer(req, res, next) {
     }
 }
 
+async function getAnswers(req, res, next) {
+    try {
+        const answers = await answerService.getAnswers(req.params.id);
+
+        SuccessResponse.data = answers;
+        SuccessResponse.message = "Fetched all answers successfully";
+        SuccessResponse.statusCode = StatusCodes.OK;
+
+        return res
+            .status(SuccessResponse.statusCode)
+            .json(SuccessResponse);
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 module.exports = {
     postAnswer,
     updateAnswer,
-    deleteAnswer
+    deleteAnswer,
+    getAnswers
 }

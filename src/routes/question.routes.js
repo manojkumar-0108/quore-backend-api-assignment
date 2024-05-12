@@ -34,4 +34,10 @@ questionRouter.post(
     answerController.postAnswer
 );
 
+questionRouter.get(
+    '/:id/answers',
+    answerController.getAnswers
+);
+
+
 module.exports = questionRouter;

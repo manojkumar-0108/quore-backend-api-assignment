@@ -94,6 +94,28 @@ class AnswerService {
         }
     }
 
+    async getAnswers(id) {
+        try {
+            const answers = await this.answerRepository.getAnswersByQueId(id);
+            return answers;
+        } catch (error) {
+            console.error(error);
+            if (error.statusCode == StatusCodes.NOT_FOUND) {
+                error.message = 'No answers found!';
+                error.details = `No answers found for given question id ${id}`;
+                throw error;
+            }
+
+            if (error instanceof BaseError) {
+                throw error;
+            }
+            if (error.name == 'MongooseError') {
+                throw new AppError(StatusCodes.SERVICE_UNAVAILABLE, "No answers found!", ['Cannot connect to database', 'Database timeout!']);
+            }
+            throw new InternalServerError('No answers found!');
+        }
+    }
+
 }
 
 module.exports = AnswerService;
