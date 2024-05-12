@@ -26,5 +26,7 @@ questionRouter.put(
 
 questionRouter.get('/', questionController.searchQuestions);
 
+questionRouter.delete('/:id', questionController.deleteQuestion);
+
 
 module.exports = questionRouter;

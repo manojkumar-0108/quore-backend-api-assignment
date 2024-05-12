@@ -65,10 +65,26 @@ async function updateQuestions(req, res, next) {
     }
 }
 
+async function deleteQuestion(req, res, next) {
+    try {
+        const question = await questionService.deleteQuestion(req.params.id);
+
+        SuccessResponse.data = question;
+        SuccessResponse.message = "Deleted question successfully";
+        SuccessResponse.statusCode = StatusCodes.OK;
+
+        return res
+            .status(SuccessResponse.statusCode)
+            .json(SuccessResponse);
+    } catch (error) {
+        next(error);
+    }
+}
 
 
 module.exports = {
     postQuestion,
     searchQuestions,
-    updateQuestions
+    updateQuestions,
+    deleteQuestion
 }

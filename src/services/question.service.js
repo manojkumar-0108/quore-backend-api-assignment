@@ -119,6 +119,31 @@ class QuestionService {
         }
     }
 
+    async deleteQuestion(id) {
+        try {
+            const question = await this.questionRepository.destory(id);
+            return question;
+        } catch (error) {
+            console.error(error);
+            if (error.statusCode == StatusCodes.NOT_FOUND) {
+                error.message = 'Cannot delete the questions!';
+                error.details = `No questions found for given id ${id}`;
+                throw error;
+            }
+            if (error.name == 'CastError') {
+                throw new AppError(StatusCodes.BAD_REQUEST, "Cannot delete question", ['Cast to ObjectId failed', `Invalid object id received for given id: ${id}`, 'input must be a 24 character hex string, 12 byte Uint8Array, or an integer']);
+            }
+
+            if (error instanceof BaseError) {
+                throw error;
+            }
+            if (error.name == 'MongooseError') {
+                throw new AppError(StatusCodes.SERVICE_UNAVAILABLE, "Cannot delete the question!", ['Cannot connect to database', 'Database timeout!']);
+            }
+            throw new InternalServerError('Cannot delete the question');
+        }
+    }
+
 }
 
 module.exports = QuestionService;

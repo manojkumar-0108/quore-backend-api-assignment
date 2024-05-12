@@ -30,7 +30,7 @@ class CrudRepository {
     }
 
     async destory(id) {
-        const response = await Problem.findByIdAndDelete(id);
+        const response = await this.model.findByIdAndDelete(id);
         if (!response) {
             throw new AppError(StatusCodes.NOT_FOUND);
         }
