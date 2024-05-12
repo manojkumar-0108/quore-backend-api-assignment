@@ -1,8 +1,9 @@
 const { AppError, InternalServerError, BaseError } = require('../errors');
 const { StatusCodes } = require('http-status-codes');
 
-const { UserRepository } = require('../repositories');
+const { UserRepository, QuestionRepository } = require('../repositories');
 const userRepository = new UserRepository();
+const questionRepository = new QuestionRepository();
 
 class AnswerService {
 
@@ -18,10 +19,22 @@ class AnswerService {
                 throw new AppError(StatusCodes.SERVICE_UNAVAILABLE, "Answer cannot be posted", [`No user found with id: ${answerData.user_id}`]);
             }
 
+            // 2. Check if question is present or not
+            const question = await questionRepository.get(answerData.question_id);
+            if (!question) {
+                throw new AppError(StatusCodes.SERVICE_UNAVAILABLE, "Answer cannot be posted", [`No question found with id: ${answerData.question_id}`]);
+            }
+
             const answer = await this.answerRepository.create(answerData);
             return answer;
         } catch (error) {
             console.error(error);
+            if (error.statusCode == StatusCodes.NOT_FOUND) {
+                error.message = 'Cannot create the answer!';
+                error.details = `No question found for given id ${answerData.question_id}`;
+                throw error;
+            }
+
             if (error instanceof BaseError) {
                 throw error;
             }
