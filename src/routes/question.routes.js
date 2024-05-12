@@ -1,7 +1,7 @@
 const express = require('express');
 
-const { pingCheck, questionController } = require('../controllers');
-const { questionMiddlewares } = require('../middlewares');
+const { pingCheck, questionController, answerController } = require('../controllers');
+const { questionMiddlewares, answerMiddlewares } = require('../middlewares');
 
 const questionRouter = express.Router();
 
@@ -26,5 +26,12 @@ questionRouter.put(
 
 questionRouter.get('/', questionController.searchQuestions);
 
+questionRouter.delete('/:id', questionController.deleteQuestion);
+
+questionRouter.post(
+    '/:id/answers',
+    answerMiddlewares.validatePostAnswerRequest,
+    answerController.postAnswer
+);
 
 module.exports = questionRouter;

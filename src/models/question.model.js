@@ -23,7 +23,8 @@ const questionSchema = new Schema({
     },
     userId: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        required: [true, 'userId cannot be null']
     } // Reference to User model
 });
 
