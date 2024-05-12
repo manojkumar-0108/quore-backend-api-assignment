@@ -11,15 +11,14 @@ const answerService = new AnswerService(answerRepository);
 async function postAnswer(req, res, next) {
     try {
 
-        const question = await answerService.createAnswer({
-            title: req.body.title,
-            body: req.body.body,
-            topics: req.body.topics || [],
-            userId: req.body.userId
+        const answer = await answerService.createAnswer({
+            question_id: req.params.id,
+            text: req.body.text,
+            user_id: req.body.userId
         });
 
-        SuccessResponse.data = question;
-        SuccessResponse.message = "Successfully created a new questions";
+        SuccessResponse.data = answer;
+        SuccessResponse.message = "Successfully posted a new answer!";
         SuccessResponse.statusCode = StatusCodes.CREATED;
 
         return res
@@ -31,29 +30,13 @@ async function postAnswer(req, res, next) {
     }
 }
 
-async function searchQuestions(req, res, next) {
-    try {
-        const questions = await questionService.getAllQuestions(req.query);
-
-        SuccessResponse.data = questions;
-        SuccessResponse.message = "Fetched all questions successfully";
-        SuccessResponse.statusCode = StatusCodes.OK;
-
-        return res
-            .status(SuccessResponse.statusCode)
-            .json(SuccessResponse);
-    } catch (error) {
-        next(error);
-    }
-}
-
-async function updateQuestions(req, res, next) {
+async function updateAnswer(req, res, next) {
     try {
 
-        const question = await questionService.updateQuestion(req.params.id, req.body);
+        const answer = await answerService.updateAnswer(req.params.id, req.body);
 
-        SuccessResponse.data = question;
-        SuccessResponse.message = "Successfully updated question";
+        SuccessResponse.data = answer;
+        SuccessResponse.message = "Successfully updated the answer!";
         SuccessResponse.statusCode = StatusCodes.OK;
 
         return res
@@ -65,12 +48,12 @@ async function updateQuestions(req, res, next) {
     }
 }
 
-async function deleteQuestion(req, res, next) {
+async function deleteAnswer(req, res, next) {
     try {
-        const question = await questionService.deleteQuestion(req.params.id);
+        const deletedAnswer = await answerService.deleteAnswer(req.params.id);
 
-        SuccessResponse.data = question;
-        SuccessResponse.message = "Deleted question successfully";
+        SuccessResponse.data = deletedAnswer;
+        SuccessResponse.message = "Deleted answer successfully";
         SuccessResponse.statusCode = StatusCodes.OK;
 
         return res
@@ -83,8 +66,7 @@ async function deleteQuestion(req, res, next) {
 
 
 module.exports = {
-    postQuestion,
-    searchQuestions,
-    updateQuestions,
-    deleteQuestion
+    postAnswer,
+    updateAnswer,
+    deleteAnswer
 }
